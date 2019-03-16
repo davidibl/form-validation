@@ -25,19 +25,18 @@ export class FormValidator implements Validator, OnDestroy {
 
     public validate(control: FormGroup) {
         control.markAsPending();
-        this.subscription = Observable.create(observer => {
-            observer.next(this._remoteValidationService.validate(control.value));
-        })
-        .pipe( delay(2000),
-                tap(_ => this.resetValidationErrors(control)),
-                map(errors => {
-                    const errorsObject = errors as RemoteValidationErrors;
-                    errorsObject.errors.forEach(error => {
-                        this.setError(control, error);
-                    });
-                })
-        )
-        .subscribe();
+        this.subscription = this._remoteValidationService
+            .validate(control.value)
+            .pipe( delay(2000),
+                    tap(_ => this.resetValidationErrors(control)),
+                    map(errors => {
+                        const errorsObject = errors as RemoteValidationErrors;
+                        errorsObject.errors.forEach(error => {
+                            this.setError(control, error);
+                        });
+                    })
+            )
+            .subscribe();
         return null;
     }
 
