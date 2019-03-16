@@ -4,14 +4,17 @@
     <form #myForm="ngForm" [(xnFormModel)]="val" [form]="myForm" xnFormValidator>
         <xn-input-form ngModel
                         #year="ngModel"
+                        [label]="'field A'"
                         [ngModel]="null"
                         name="feldA"></xn-input-form>
         <xn-input-form ngModel
                         [ngModel]="null"
+                        [label]="'field B'"
                         name="feldB"></xn-input-form>
         <fieldset ngModelGroup="sub">
             <xn-input-form ngModel
                             [ngModel]="null"
+                            [label]="'field B in nested type'"
                             name="feldB"></xn-input-form>
         </fieldset>
     </form>
