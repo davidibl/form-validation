@@ -61,14 +61,14 @@ export class FormValidator implements Validator, OnDestroy {
     }
 
     private markAllPending(form: FormGroup) {
-        this.forAllControls(form, (control) => control.markAsPending());
+        this.forAllControls(form, (group) => this.markAllPending(group), (control) => control.markAsPending());
     }
 
     private resetValidationErrors(form: FormGroup) {
-        this.forAllControls(form, (control) => control.setErrors(null));
+        this.forAllControls(form, (group) => this.resetValidationErrors(group), (control) => control.setErrors(null));
     }
 
-    private forAllControls(form: FormGroup, func: (control: AbstractControl) => void) {
+    private forAllControls(form: FormGroup, formGroupFunc: (formGroup: FormGroup) => void, func: (control: AbstractControl) => void) {
         const controls = Object.keys(form.controls)
             .map(key => form.controls[key]);
 
@@ -78,7 +78,7 @@ export class FormValidator implements Validator, OnDestroy {
 
         controls
             .filter(control => !!control['controls'])
-            .forEach(control => this.resetValidationErrors(<FormGroup>control));
+            .forEach(control => formGroupFunc(<FormGroup>control));
     }
 
     private createValidationMessage(error: {[key: string]: string}) {
