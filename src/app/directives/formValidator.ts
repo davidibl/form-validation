@@ -1,11 +1,12 @@
-import { Directive, forwardRef, OnDestroy } from '@angular/core';
+import { Directive, forwardRef, OnDestroy, OnInit } from '@angular/core';
 import { Validator, NG_VALIDATORS, FormGroup, AbstractControl } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
-import { delay } from 'rxjs/operators/delay';
-import { map } from 'rxjs/operators/map';
-import { tap } from 'rxjs/operators/tap';
+import { Subscription } from 'rxjs/Subscription';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { RemoteValidationService } from '../services/remoteValidationService';
 import { RemoteValidationErrors, RemoteValidationError } from '../model/remoteValidatonErrors';
+import { debounceTime } from 'rxjs/operators/debounceTime';
+import { map } from 'rxjs/operators/map';
+import { tap } from 'rxjs/operators/tap';
 
 @Directive({
     providers: [
@@ -20,10 +21,22 @@ import { RemoteValidationErrors, RemoteValidationError } from '../model/remoteVa
 export class FormValidator implements Validator, OnDestroy {
 
     private subscription: Subscription;
+    private _debounceSubject = new ReplaySubject<() => void>(1);
 
-    constructor(private _remoteValidationService: RemoteValidationService) { }
+    constructor(private _remoteValidationService: RemoteValidationService) {
+        this._debounceSubject.pipe( debounceTime(500) ).subscribe(func => func());
+    }
 
     public validate(form: FormGroup) {
+        this._debounceSubject.next(() => this.validateRemote(form));
+        return null;
+    }
+
+    public ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+
+    private validateRemote(form: FormGroup) {
         this.markAllPending(form);
         this.subscription = this._remoteValidationService
             .validate(form.value)
@@ -37,11 +50,6 @@ export class FormValidator implements Validator, OnDestroy {
                 })
             )
             .subscribe();
-        return null;
-    }
-
-    public ngOnDestroy() {
-        this.subscription.unsubscribe();
     }
 
     private setError(form: FormGroup, error: RemoteValidationError) {
