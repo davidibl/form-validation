@@ -1,0 +1,22 @@
+<h2>Remote Form Validation</h2>
+<small>A little example on how to validate complex objects remotely with template driven forms and angular validator.</small>
+<div class="main-content full-height mt-2">
+    <form #myForm="ngForm" [(xnFormModel)]="val" [form]="myForm" xnFormValidator>
+        <xn-input-form ngModel
+                        #year="ngModel"
+                        [ngModel]="null"
+                        name="feldA"></xn-input-form>
+        <xn-input-form ngModel
+                        [ngModel]="null"
+                        name="feldB"></xn-input-form>
+        <fieldset ngModelGroup="sub">
+            <xn-input-form ngModel
+                            [ngModel]="null"
+                            name="feldB"></xn-input-form>
+        </fieldset>
+    </form>
+    <pre>{{myForm.value | json}}</pre>
+    <pre>Form Status Valid: {{myForm.valid}}</pre>
+    <pre>Form Validation Pending: {{myForm.pending}}</pre>
+    <pre>{{val | json}}</pre>
+</div>

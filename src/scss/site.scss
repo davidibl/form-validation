@@ -1,0 +1,13 @@
+$fa-font-path: '../../node_modules/font-awesome/fonts';
+@import "./_variables";
+@import "./_mixins";
+@import "../../node_modules/getbase/src/scss/base.scss";
+@import "../../node_modules/getbase/src/scss/base/_helpers.scss";
+@import "breakpoint";
+@import "../../node_modules/@xnoname/web-components/module/styles/core.scss";
+@import "helpers";
+
+body {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
