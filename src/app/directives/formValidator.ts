@@ -27,14 +27,14 @@ export class FormValidator implements Validator, OnDestroy {
         control.markAsPending();
         this.subscription = this._remoteValidationService
             .validate(control.value)
-            .pipe( delay(2000),
-                    tap(_ => this.resetValidationErrors(control)),
-                    map(errors => {
-                        const errorsObject = errors as RemoteValidationErrors;
-                        errorsObject.errors.forEach(error => {
-                            this.setError(control, error);
-                        });
-                    })
+            .pipe(
+                tap(_ => this.resetValidationErrors(control)),
+                map(errors => {
+                    const errorsObject = errors as RemoteValidationErrors;
+                    errorsObject.errors.forEach(error => {
+                        this.setError(control, error);
+                    });
+                })
             )
             .subscribe();
         return null;
