@@ -3,6 +3,6 @@ export class RemoteValidationError {
 }
 
 export class RemoteValidationErrors {
-
     errors: RemoteValidationError[];
+    generalMessage: string;
 }
