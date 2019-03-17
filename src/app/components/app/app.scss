@@ -1,2 +1,7 @@
 @import 'variables';
 @import 'mixins';
+
+:host {
+    padding: 25px;
+    display: block;
+}
