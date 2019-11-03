@@ -18,6 +18,7 @@ export class FormModelDirective implements OnInit {
 
     @Output()
     public xnFormModelChange = new EventEmitter<any>();
+
     constructor() { }
 
     public ngOnInit() {
